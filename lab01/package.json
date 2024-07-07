@@ -1,0 +1,22 @@
+{
+  "name": "lab01",
+  "version": "1.0.0",
+  "description": "lab01",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@openfeature/flagd-provider": "^0.13.0",
+    "fastify": "^4.28.1"
+  }
+}
