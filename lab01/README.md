@@ -8,7 +8,7 @@
 
 ```
 docker run \
-  --rm -it \
+  --rm -d \
   --name flagd \
   -p 8013:8013 \
   -v $(pwd):/etc/flagd \
