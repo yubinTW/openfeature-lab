@@ -1,0 +1,96 @@
+{
+  "$schema": "https://flagd.dev/schema/v0/flags.json",
+  "flags": {
+    "enable-new-llm-model": {
+      "state": "ENABLED",
+      "defaultVariant": "disabled",
+      "variants": {
+        "disabled": false,
+        "phase1Enabled": true,
+        "phase1Disabled": false,
+        "phase2Enabled": true,
+        "phase2Disabled": false,
+        "phase3Enabled": true,
+        "phase3Disabled": false,
+        "enabled": true
+      },
+      "targeting": {
+        "if": [
+          {
+            ">=": [
+              1720466993,
+              {
+                "var": "$flagd.timestamp"
+              }
+            ]
+          },
+          "disabled",
+          {
+            "<=": [
+              1720466993,
+              {
+                "var": "$flagd.timestamp"
+              },
+              1720466998
+            ]
+          },
+          {
+            "fractional": [
+              [
+                "phase1Enabled",
+                10
+              ],
+              [
+                "phase1Disabled",
+                90
+              ]
+            ]
+          },
+          {
+            "<=": [
+              1720466998,
+              {
+                "var": "$flagd.timestamp"
+              },
+              1720467003
+            ]
+          },
+          {
+            "fractional": [
+              [
+                "phase2Enabled",
+                25
+              ],
+              [
+                "phase2Disabled",
+                75
+              ]
+            ]
+          },
+          {
+            "<=": [
+              1720467003,
+              {
+                "var": "$flagd.timestamp"
+              },
+              1720467008
+            ]
+          },
+          {
+            "fractional": [
+              [
+                "phase3Enabled",
+                50
+              ],
+              [
+                "phase3Disabled",
+                50
+              ]
+            ]
+          },
+          "enabled"
+        ]
+      }
+    }
+  }
+}
