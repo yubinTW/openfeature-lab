@@ -1,6 +1,10 @@
 # Lab03
 
-OpenFeature operator
+[OpenFeature operator](https://github.com/open-feature/open-feature-operator/)
+
+Using flagd as sidecar
+
+![](./images/lab03-arch.excalidraw.png)
 
 Create kind cluster
 
@@ -21,9 +25,7 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 kubectl wait --timeout=60s --for condition=Available=True deploy --all -n 'cert-manager'
 ```
 
-Install OpenFeature operator
-
-by helm
+Install OpenFeature operator (by helm)
 
 ```
 helm repo add openfeature https://open-feature.github.io/open-feature-operator/ && \
