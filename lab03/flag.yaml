@@ -1,0 +1,35 @@
+
+# Flags for our backend application
+apiVersion: core.openfeature.dev/v1beta1
+kind: FeatureFlag
+metadata:
+  name: app-flags
+  labels:
+    app: open-feature-demo
+spec:
+  flagSpec:
+    flags:
+      experiment:
+        variants:
+          'on': true
+          'off': false
+        defaultVariant: 'on'
+        state: ENABLED
+        targeting:
+          if:
+            - ends_with:
+                - var: email
+                - "@mycompany.com"
+            - 'on'
+---
+# Feature flag source custom resource, configuring flagd to source flags from FeatureFlag CRDs
+apiVersion: core.openfeature.dev/v1beta1
+kind: FeatureFlagSource
+metadata:
+  name: flag-sources
+  labels:
+    app: open-feature-demo
+spec:
+  sources:
+    - source: app-flags
+      provider: kubernetes

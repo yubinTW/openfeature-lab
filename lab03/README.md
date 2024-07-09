@@ -33,10 +33,22 @@ helm repo update && \
 helm upgrade --install open-feature-operator openfeature/open-feature-operator
 ```
 
-Apply yaml
+Load image build from lab02
 
 ```
-kubectl -n default apply -f end-to-end.yaml 
+kind load docker-image lab02-app:latest
+```
+
+Apply flag yaml
+
+```
+kubectl -n default apply -f flag.yaml
+```
+
+Apply app yaml
+
+```
+kubectl -n default apply -f app.yaml
 ```
 
 Get the custom resource (CRs)
@@ -48,6 +60,12 @@ kubectl get FeatureFlag
 ```
 kubectl get FeatureFlagSource
 ```
+
+Visit http://localhost:30000/ping
+
+Change flag.yaml and apply `flag.yaml` again
+
+Visit http://localhost:30000/ping
 
 Clear the resource
 

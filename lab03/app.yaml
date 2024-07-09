@@ -1,0 +1,51 @@
+# Deployment of a demo-app using our custom resources
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-feature-demo-deployment
+  labels:
+    app: open-feature-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open-feature-demo
+  template:
+    metadata:
+      labels:
+        app: open-feature-demo
+      annotations:
+        openfeature.dev/enabled: 'true'
+        openfeature.dev/featureflagsource: 'flag-sources'
+    spec:
+      containers:
+        - name: open-feature-demo
+          image: lab02-app:latest # build from lab02
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 30000
+          env:
+            - name: FASTIFY_PORT
+              value: '30000'
+            - name: FASTIFY_HOST
+              value: '0.0.0.0'
+            - name: FLAGD_HOST
+              value: 'localhost'
+            - name: FLAGD_PORT
+              value: '8013'
+---
+# Service to expose our application
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-feature-demo-app-service
+  labels:
+    app: open-feature-demo
+spec:
+  type: NodePort
+  selector:
+    app: open-feature-demo
+  ports:
+    - port: 30000
+      targetPort: 30000
+      nodePort: 30000
