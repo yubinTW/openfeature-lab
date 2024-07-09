@@ -1,13 +1,26 @@
 {
   "$schema": "https://flagd.dev/schema/v0/flags.json",
   "flags": {
-    "feature-a": {
+    "experiment": {
       "state": "ENABLED",
       "variants": {
         "on": true,
         "off": false
       },
-      "defaultVariant": "off"
+      "defaultVariant": "off",
+      "targeting": {
+        "if": [
+          {
+            "ends_with": [
+              {
+                "var": "email"
+              },
+              "@mycompany.com"
+            ]
+          },
+          "on"
+        ]
+      }
     }
   }
 }

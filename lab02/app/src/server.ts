@@ -13,6 +13,8 @@ declare module 'fastify' {
 type AppConfig = {
   port: number
   host: string
+  flagdHost: string
+  flagdPort: number
 }
 
 const httpRequestDurationMicroseconds = new promClient.Histogram({
@@ -26,8 +28,6 @@ promClient.collectDefaultMetrics()
 export const startServer = async (appConfig: AppConfig) => {
   // Create an instance of Fastify
   const server = fastify()
-
-  server.decorate('startTime')
 
   server.addHook('onRequest', async (request, reply) => {
     request.startTime = process.hrtime()
@@ -44,25 +44,25 @@ export const startServer = async (appConfig: AppConfig) => {
   // Initialize OpenFeature
   OpenFeature.setProvider(
     new FlagdProvider({
-      host: process.env.FLAGD_HOST,
-      port: parseInt(process.env.FLAGD_PORT || '8013')
+      host: appConfig.flagdHost,
+      port: appConfig.flagdPort
     })
   )
   const client = OpenFeature.getClient()
 
-  // Declare a route
   server.get('/', async (request, reply) => {
     return { hello: 'world' }
   })
 
   server.get('/ping', async (request, reply) => {
-    // Evaluate the feature flag 'experiment'
-    const enableFeatureA = await client.getBooleanValue('experiment', false)
-    request.flag = enableFeatureA ? 'Experiment' : 'Normal'
+    const email = request.headers['email'] as string
+    const context = { email }
+    const enableExperimentFeature = await client.getBooleanValue('experiment', true, context)
+    request.flag = enableExperimentFeature ? 'Experiment' : 'Normal'
 
-    if (enableFeatureA) {
-      await new Promise((resolve) => setTimeout(resolve, 500)) // experiment workflow is slow! QAQ
-      return { message: 'pong!pong!pong!' }
+    if (enableExperimentFeature) {
+      await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * 500))) // experiment workflow is slow! QAQ
+      return { message: 'Experiment: pong!pong!pong!' }
     } else {
       return { message: 'pong!' }
     }
