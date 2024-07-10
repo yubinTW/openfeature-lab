@@ -47,4 +47,10 @@ Invoke the `/ping` API
 curl http://localhost:8888/ping
 ```
 
-Than modify the flagd config file
+Than modify the flagd config file, save and invoke `/ping` again
+
+## Clear the resource
+
+```
+docker rm -f flagd
+```
