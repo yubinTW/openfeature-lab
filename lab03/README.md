@@ -6,6 +6,8 @@ Using flagd as sidecar
 
 ![](./images/lab03-arch.excalidraw.png)
 
+## Create kubernetes cluster (with kind)
+
 Create kind cluster
 
 ```
@@ -17,6 +19,10 @@ Show cluster info with `kubectl`
 ```
 kubectl cluster-info
 ```
+
+## Install OpenFeature Operator
+
+> reference: https://openfeature.dev/docs/tutorials/open-feature-operator/quick-start
 
 Install Cert-Manager
 
@@ -33,22 +39,12 @@ helm repo update && \
 helm upgrade --install open-feature-operator openfeature/open-feature-operator
 ```
 
-Load image build from lab02
+## Deploy the flag definition
 
-```
-kind load docker-image lab02-app:latest
-```
-
-Apply flag yaml
+Apply flag yaml, deploy `FeatureFlag` and `FeatureFlagSource` to kubernetes cluster
 
 ```
 kubectl -n default apply -f flag.yaml
-```
-
-Apply app yaml
-
-```
-kubectl -n default apply -f app.yaml
 ```
 
 Get the custom resource (CRs)
@@ -61,13 +57,37 @@ kubectl get FeatureFlag
 kubectl get FeatureFlagSource
 ```
 
-Visit http://localhost:30000/ping
+## Deploy the application
 
-Change flag.yaml and apply `flag.yaml` again
+Load image build from lab02
 
-Visit http://localhost:30000/ping
+```
+kind load docker-image lab02-app:latest
+```
 
-Clear the resource
+Apply app yaml
+
+```
+kubectl -n default apply -f app.yaml
+```
+
+## How to play
+
+1. Visit http://localhost:30000/ping
+
+2. Change `flag.yaml` and apply `flag.yaml` again
+
+edit `FeatureFlag` resource in `flag.yaml`
+
+and apply the change with `kubectl`
+
+```
+kubectl -n default apply -f app.yaml
+```
+
+3. Visit http://localhost:30000/ping again
+
+## Clear the resource
 
 ```
 kind delete cluster
